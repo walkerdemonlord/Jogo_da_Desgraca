@@ -1,0 +1,120 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4ec0ca;
+}
+
+
+main {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+
+.animacao_fundo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background: url('pano_de_fundo_main.jpg');
+    background-size: auto 100%;
+    background-position: left top;
+    animation: slide 10s linear infinite;
+}
+
+
+@keyframes slide {
+    0% {
+        background-position: -100% 0;
+    }
+    100% {
+        background-position: 0 0;
+    }
+}
+
+
+.passaro_voando {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    width: 120px;
+    height: 120px;
+    background: url('https://i0.wp.com/thelukewest.files.wordpress.com/2016/11/bird-flying.gif?w=1200') no-repeat center center;
+    background-size: cover;
+    transform: translate(-50%, -50%);
+}
+
+
+@keyframes moveLeft {
+    0% {
+        right: 0;
+    }
+    100% {
+        right: 100%;
+    }
+}
+
+
+.obstaculo {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background-image: url('passaro_vermelho.gif');
+    background-size: cover;
+    animation: moveLeft 5s linear forwards;
+}
+
+
+.bam {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    background: url('bam!.png') no-repeat center center;
+    background-size: cover;
+    display: none;
+}
+
+
+.gameover-container img {
+    width: 1000px; /* Ajuste o tamanho do GIF aqui */
+}
+
+
+.gameover-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+
+.hidden {
+    display: none;
+}
+
+.coracoes {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    display: flex;
+    align-items: center;
+    z-index: 100;
+}
+
+.coracoes .coracao {
+    width: 50px;
+    height: auto;
+    margin-right: 5px;
+}

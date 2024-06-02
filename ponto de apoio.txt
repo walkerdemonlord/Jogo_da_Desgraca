@@ -1,0 +1,65 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const gameArea = document.querySelector('main');
+    let obstacles = []; // Array para armazenar os obstáculos gerados
+
+    // Função para verificar se há sobreposição de obstáculos
+    function checkOverlap(newObstacle) {
+        const newRect = newObstacle.getBoundingClientRect();
+        for (const obstacle of obstacles) {
+            const rect = obstacle.getBoundingClientRect();
+            if (
+                newRect.right > rect.left && newRect.left < rect.right &&
+                newRect.bottom > rect.top && newRect.top < rect.bottom
+            ) {
+                return true; // Há sobreposição
+            }
+        }
+        return false; // Não há sobreposição
+    }
+
+    // Função para gerar obstáculos aleatórios sem sobreposição
+    function generateObstacle() {
+        const obstacle = document.createElement('div');
+        obstacle.classList.add('obstaculo');
+        let top = Math.floor(Math.random() * (gameArea.clientHeight - 100)); // Posição aleatória na altura
+        let overlap = false;
+
+        // Verificar e ajustar sobreposição
+        do {
+            overlap = false;
+            obstacle.style.top = top + 'px';
+            if (checkOverlap(obstacle)) {
+                overlap = true;
+                top = Math.floor(Math.random() * (gameArea.clientHeight - 100));
+            }
+        } while (overlap);
+
+        obstacle.style.right = '100%'; // Começa do lado direito da tela
+        gameArea.querySelector('.obstaculos').appendChild(obstacle);
+        moveObstacle(obstacle); // Inicia a animação do obstáculo
+        obstacles.push(obstacle); // Adiciona o obstáculo ao array de obstáculos
+    }
+
+    // Função para mover o obstáculo
+    function moveObstacle(obstacle) {
+        obstacle.animate([
+            { right: '-80px' }, // Posição inicial (fora da tela do lado direito)
+            { right: '100%' } // Posição final (fora da tela do lado esquerdo)
+        ], {
+            duration: 9000, // Duração da animação: 9 segundos
+            easing: 'linear', // Movimento linear
+            iterations: Infinity // Repetir infinitamente
+        });
+    }
+
+    // Função para gerar um único obstáculo aleatório
+    function generateSingleObstacle() {
+        // Gera apenas um obstáculo
+        generateObstacle();
+        // Define um novo intervalo para a próxima geração de obstáculo
+        setTimeout(generateSingleObstacle, Math.random() * 1000 + 6000); // Intervalo aleatório entre 3 e 6 segundos
+    }
+
+    // Inicia o processo de geração de obstáculos
+    generateSingleObstacle();
+});
