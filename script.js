@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const keysPressed = {};
     let obstacleGenerationInterval;
     let collisionDetectionInterval;
+    let timeCounter = 0;
+    let obstacleSpeed = 2;
+    let numberOfObstacles = 1;
 
     // Função para reproduzir o som de colisão
     function playCollisionSound() {
@@ -85,14 +88,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-// Função para gerar um obstáculo aleatório
-function generateObstacle() {
-    obstacles = []; // Limpa a matriz de obstáculos antes de gerar novos obstáculos
-
-    const numberOfObstacles = Math.floor(Math.random() * 4) + 1; // Gera um número aleatório entre 1 e 4
-
-    const generateWithDelay = (index) => {
-        if (index < numberOfObstacles) {
+    // Função para gerar obstáculos aleatórios
+    function generateObstacles(speed, count) {
+        for (let i = 0; i < count; i++) {
             const obstacle = document.createElement('div');
             obstacle.classList.add('obstaculo');
             let top;
@@ -109,23 +107,13 @@ function generateObstacle() {
             obstacle.style.top = top + 'px';
             obstacle.style.right = '-80px';
             obstacleContainer.appendChild(obstacle);
-            moveObstacle(obstacle);
+            moveObstacle(obstacle, speed);
             obstacles.push(obstacle);
-
-            if (index > 0) {
-                setTimeout(() => {
-                    generateWithDelay(index + 1);
-                }, 1000); // Atraso de 1 segundo entre obstáculos
-            } else {
-                generateWithDelay(index + 1);
-            }
         }
-    };
+    }
 
-    generateWithDelay(0);
-}
     // Função para mover o obstáculo
-    function moveObstacle(obstacle) {
+    function moveObstacle(obstacle, speed) {
         const moveInterval = setInterval(() => {
             if (gameOverFlag) {
                 clearInterval(moveInterval);
@@ -137,9 +125,20 @@ function generateObstacle() {
                 obstacle.remove();
                 obstacles = obstacles.filter(obs => obs !== obstacle);
             } else {
-                obstacle.style.right = (right + 2) + 'px';
+                obstacle.style.right = (right + speed) + 'px';
             }
         }, 20);
+    }
+
+    // Função para aumentar a dificuldade ao longo do tempo
+    function increaseDifficulty() {
+        timeCounter++;
+        if (timeCounter % 10 === 0) { // Aumenta a dificuldade a cada 10 segundos
+            numberOfObstacles = Math.min(numberOfObstacles + 1, 4); // Aumenta a quantidade de obstáculos até um máximo de 4
+            obstacleSpeed += 0.5; // Aumenta a velocidade dos obstáculos
+            if (obstacleGenerationInterval) clearInterval(obstacleGenerationInterval);
+            obstacleGenerationInterval = setInterval(() => generateObstacles(obstacleSpeed, numberOfObstacles), Math.max(1000, 4000 - timeCounter * 200));
+        }
     }
 
     // Função para mostrar a imagem "bam!"
@@ -192,8 +191,11 @@ function generateObstacle() {
     // Inicia o movimento do pássaro e a geração de obstáculos
     moveBird();
     setupHearts();
-    obstacleGenerationInterval = setInterval(generateObstacle, Math.random() * 1000 + 3000);
+    obstacleGenerationInterval = setInterval(() => generateObstacles(obstacleSpeed, numberOfObstacles), 4000); // Inicia com intervalo de 4 segundos
     collisionDetectionInterval = setInterval(detectCollision, 100);
+
+    // Inicia o contador de tempo
+    setInterval(increaseDifficulty, 1000);
 
     // Inicia a música de fundo após 1 segundo
     setTimeout(() => {
@@ -215,7 +217,7 @@ function generateObstacle() {
 
     // Função para adicionar corações ao contêiner de corações
     function setupHearts() {
-        for (let i= 1; i <= lives; i++) {
+        for (let i = 1; i <= lives; i++) {
             const coracao = document.createElement('img');
             coracao.src = `coracoes1b.png`;
             coracao.classList.add('coracao');
