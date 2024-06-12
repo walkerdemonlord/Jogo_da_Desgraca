@@ -47,7 +47,7 @@ main {
     left: 10%;
     width: 120px;
     height: 120px;
-    background: url('https://i0.wp.com/thelukewest.files.wordpress.com/2016/11/bird-flying.gif?w=1200') no-repeat center center;
+    background: url('passaro_voando.gif') no-repeat center center;
     background-size: cover;
     transform: translate(-50%, -50%);
 }
