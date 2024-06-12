@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const coracoesContainer = document.querySelector('.coracoes');
     const birdSize = 120;
     let obstacles = [];
-    let gravity = 0.6;
+    let gravity = 0.8;
     let velocity = 0;
     let lives = 3;
     let gameOverFlag = false;

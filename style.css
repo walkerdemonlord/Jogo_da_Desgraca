@@ -27,16 +27,16 @@ main {
     background: url('pano_de_fundo_main.jpg');
     background-size: auto 100%;
     background-position: left top;
-    animation: slide 10s linear infinite;
+    animation: slide 40s linear infinite;
 }
 
 
 @keyframes slide {
     0% {
-        background-position: -100% 0;
+        background-position: 100% 0;
     }
     100% {
-        background-position: 0 0;
+        background-position: -100% 0;
     }
 }
 
